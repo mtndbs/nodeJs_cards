@@ -2,7 +2,9 @@
 כמה נקודות חשובות לגבי העבודה
 
 - In this project I chose to use mongoose.shcema and npm validator for validation, (not with joi)
-  כמובן שהכל עובד כתיקונו , הקוד יותר קרי לדעתי וכמו שתראה בעצמך, כמו כן לא ראיתי צורך להשתמש בלודאש
+
+- כמובן שהכל עובד כתיקונו , הקוד יותר קרי לדעתי וכמו שתראה בעצמך, כמו כן לא ראיתי צורך להשתמש בלודאש
+
 - i used Eslint for better coding structure, also with Prettier.
 
 - בקונטרולרס" תמצא אם כל הפונקציות ע"פ נושאים "
@@ -14,8 +16,9 @@
 - end point 1: POST
   http://localhost:7800/api/users/signup
 
-* שים לב שצריך לשלוח גם אימות סיסמה !! -- "confirmPassword"
-  דוגמה למבנה בג'ייסון
+* שים לב שצריך לשלוח גם אימות סיסמה !! --
+
+- דוגמה למבנה בג'ייסון
   {
   "name":"test",
   "email":"test@gmail.com",
