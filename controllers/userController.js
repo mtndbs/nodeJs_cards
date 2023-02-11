@@ -4,8 +4,8 @@ exports.getUser = async (req, res) => {
   try {
     //  Verifiy token
     const decoded = req.user;
-    const currentUser = await User.findById(decoded.id).select('-password');
-    res.status(200).json({ status: 'success', 'user details': currentUser });
+    const currentUser = await User.findById(decoded.id);
+    res.status(200).json({ status: 'success', 'User details': currentUser });
   } catch (err) {
     res.status(404).json({
       status: 'fail',

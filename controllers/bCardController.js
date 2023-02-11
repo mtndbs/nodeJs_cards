@@ -21,8 +21,9 @@ exports.getAllcards = async (req, res) => {
 exports.createCard = async (req, res) => {
   try {
     const decoded = req.user;
-    req.body.user_id = decoded.id;
-    const newCard = await Card.create(req.body);
+    const { id } = decoded.id;
+    const { bName, bDiscription, bAdress, bPhone } = req.body;
+    const newCard = await Card.create({ bName, bDiscription, bAdress, bPhone, id }); // didnt use only with req.body, because security isues
 
     res.status(200).json({
       status: 'success',
@@ -104,6 +105,23 @@ exports.getMyCards = async (req, res) => {
       status: 'success',
       results: myCards.length,
       data: myCards
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err.message
+    });
+  }
+};
+
+exports.getMyCardsJoi = async (req, res) => {
+  try {
+    const currentUserId = req.user.id;
+    const allUserCards = await Card.find({ user_id: currentUserId });
+    res.status(200).json({
+      status: 'succes',
+      results: allUserCards.length,
+      data: allUserCards
     });
   } catch (err) {
     res.status(404).json({

@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken');
 // eslint-disable-next-line node/no-unsupported-features/node-builtins
-
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const User = require('./../models/userModel');
-// token sign function
+// Token sign function
 const signToken = (id, biz) => {
   return jwt.sign({ id, biz }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN
@@ -13,7 +13,7 @@ const signToken = (id, biz) => {
 exports.protector = async (req, res, next) => {
   try {
     let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    if (req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
     }
 
@@ -46,11 +46,13 @@ exports.protector = async (req, res, next) => {
 
 exports.signUp = async (req, res) => {
   try {
-    const newUser = await User.create(req.body);
-    const { name, email, _id } = newUser;
+    const { name, email, password, confirmPassword } = req.body;
+    const newUser = await User.create({ name, email, password, confirmPassword });
+    // const { name, email, _id } = newUser;
     res.status(200).json({
       status: 'success',
-      data: { name, email, _id },
+      // data: newUser,
+      data: _.pick(newUser, ['_id', 'name', 'email']),
       message: 'user has been registered successfully'
     });
   } catch (err) {

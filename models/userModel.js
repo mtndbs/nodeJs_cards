@@ -6,21 +6,21 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'you must have a name'],
-    maxlength: 100,
-    minlength: 1
+    maxlength: [100, 'The username is too long'],
+    minlength: [1, 'The username is too short']
   },
   email: {
     type: String,
     unique: true,
-    maxlength: 150,
-    required: true,
-    validate: [validator.isEmail, 'please provide currect E-mail']
+    maxlength: [250, 'The e-mail is too long'],
+    required: [true, 'Please provide an E-mail'],
+    validate: [validator.isEmail, 'Please provide currect E-mail']
   },
   password: {
     type: String,
     required: [true, 'Please provide a password'],
-    minlength: 8,
-    maxlength: 200,
+    minlength: [8, 'The password must contain a minimum of 8 characters '],
+    maxlength: [250, 'The password must contain a miximum of 250 characters'],
     select: false
   },
   confirmPassword: {

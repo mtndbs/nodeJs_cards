@@ -13,6 +13,8 @@ router
   .route('/my') //http://localhost:7800/api/cards/my
   .get(authController.protector, cardController.getMyCards);
 
+router.get('/myjoi', authController.protector, cardController.getMyCardsJoi);
+
 router
   .route('/:id') //http://localhost:7800/api/cards/:id
   .get(authController.protector, cardController.getOneCard)

@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const _ = require('lodash');
 
 const cardSchema = new mongoose.Schema({
   bName: {
     type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30
+    required: [true, 'Buisness name is required'],
+    minlength: [1, 'Buisness name is too short'],
+    maxlength: [250, 'Buisness name can not be more then 250 letters']
   },
   user_id: {
     type: String,
@@ -14,14 +15,16 @@ const cardSchema = new mongoose.Schema({
   },
   bDiscription: {
     type: String,
-    maxlength: 400
+    maxlength: [2000, 'Buisness card can not be more then 2000 letters']
   },
   bAdress: {
     type: String,
-    maxlength: 250
+    maxlength: [250, 'Buisness adress can not be more then 250 letters']
   },
   bPhone: {
     type: String,
+    minlength: [6, 'Phone number is too short'],
+    maxlength: [250, 'Phone number is too long'],
     validate: [validator.isDecimal, 'Please provide a valid phone number']
   },
   bPhoto: {
@@ -29,8 +32,12 @@ const cardSchema = new mongoose.Schema({
   },
   cardNum: {
     type: Number,
+    //סיכוי נמוך מאוד למספר תואם באופן רנדומלי, לכן לא רציתי להכניס בפונקציה בדיקה מול השרת בכל פוסט שתעמיס סתם
     unique: [true, 'somthing get wrong, try again'],
-    default: () => Math.floor(100000 + Math.random() * 900000)
+    default: () => {
+      const randomNumber = _.random(1000, 999999);
+      return randomNumber;
+    }
   },
   createdAt: {
     type: Date,
