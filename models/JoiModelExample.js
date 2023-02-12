@@ -4,15 +4,9 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String
-  },
-  email: {
-    type: String
-  },
-  password: {
-    type: String
-  },
+  name: String,
+  email: String,
+  password: String,
   confirmPassword: {
     type: String,
     required: [true, 'Please confirm your password'],
@@ -32,24 +26,24 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-function validateUser(user) {
+const validateUser = user => {
   const schema = Joi.object({
     name: Joi.string()
       .min(2)
-      .max(255)
+      .max(250)
       .required(),
     email: Joi.string()
       .min(6)
-      .max(255)
+      .max(250)
       .required()
       .email(),
     password: Joi.string()
       .min(6)
-      .max(1024)
+      .max(250)
       .required(),
     biz: Joi.boolean().required()
   });
 
   return schema.validate(user);
-}
+};
 module.exports = { User, validateUser };

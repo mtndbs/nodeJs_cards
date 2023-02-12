@@ -9,6 +9,7 @@ router.route('/signup').post(authController.signUp); //http://localhost:7800/api
 router.route('/login').post(authController.logIn); //http://localhost:7800/api/users/login
 router.route('/me').get(authController.protector, userController.getUser); // http://localhost:7800/api/users/me
 
+router.route('/forgotpassword').post(authController.forgotPassword);
 // פה עתיד להיות עריכת משתמש וכו, לא התבקש בעבודה
 router // http://localhost:7800/api/users
   .route('/')

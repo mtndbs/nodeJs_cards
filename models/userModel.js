@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -40,10 +41,12 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now()
-  }
+  },
+  passwordResetToken: String,
+  passwordResetTokenExpires: Date
 });
 
-// ============================= uscerSchema methods ==========================
+// ============================= uscerSchema methods/pre-save/validations ==========================
 
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next(); // Only run when password is modified
@@ -51,6 +54,21 @@ userSchema.pre('save', async function(next) {
   this.confirmPassword = undefined; //Delete the confirm password
   next();
 });
+
+userSchema.methods.createPasswordResetToken = function() {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  console.log({ resetToken }, this.passwordResetToken);
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
+};
 const User = mongoose.model('user', userSchema);
 
 // adding Error handling for the 'unique' parameter
@@ -58,5 +76,7 @@ userSchema.path('email').validate(async value => {
   const emailCount = await User.countDocuments({ email: value });
   return !emailCount;
 }, 'Email already exists');
+
+// Reset password Token , using crypto
 
 module.exports = User;
