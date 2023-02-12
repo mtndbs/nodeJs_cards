@@ -42,8 +42,9 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now()
   },
+  passwordChangedAt: Date,
   passwordResetToken: String,
-  passwordResetTokenExpires: Date
+  passwordResetExpires: Date
 });
 
 // ============================= uscerSchema methods/pre-save/validations ==========================
@@ -55,6 +56,11 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
+userSchema.pre('save', function(next) {
+  if (!this.isModified('password' || this.isNew)) return next();
+  this.passwordChangedAt = Date.now();
+  next();
+});
 userSchema.methods.createPasswordResetToken = function() {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
@@ -70,13 +76,5 @@ userSchema.methods.createPasswordResetToken = function() {
   return resetToken;
 };
 const User = mongoose.model('user', userSchema);
-
-// adding Error handling for the 'unique' parameter
-userSchema.path('email').validate(async value => {
-  const emailCount = await User.countDocuments({ email: value });
-  return !emailCount;
-}, 'Email already exists');
-
-// Reset password Token , using crypto
 
 module.exports = User;

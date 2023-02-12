@@ -9,11 +9,8 @@ router
   .get(authController.protector, cardController.getAllcards)
   .post(authController.protector, cardController.createCard);
 
-router
-  .route('/my') //http://localhost:7800/api/cards/my
-  .get(authController.protector, cardController.getMyCards);
-
-router.get('/myjoi', authController.protector, cardController.getMyCardsJoi);
+//http://localhost:7800/api/cards/my
+router.get('/my', authController.protector, cardController.getMyCards);
 
 router
   .route('/:id') //http://localhost:7800/api/cards/:id

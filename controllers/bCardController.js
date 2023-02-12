@@ -44,6 +44,9 @@ exports.getOneCard = async (req, res) => {
       return res.status(400).json({ message: 'problem with URL details' });
     }
     const oneCard = await Card.findById(id);
+    if (!oneCard) {
+      return res.status(404).json({ status: 'fail', message: 'there is no such id' });
+    }
     res.status(200).json({
       status: 'success',
       data: oneCard
@@ -66,6 +69,9 @@ exports.upDateCard = async (req, res) => {
       new: true,
       runValidators: true // running schema validation also when updating
     });
+    if (!oneCard) {
+      return res.status(404).json({ status: 'failed', message: 'There is no such Id' });
+    }
     res.status(200).json({
       status: 'success',
       data: oneCard
@@ -83,8 +89,10 @@ exports.deleteCard = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: 'problem with URL details' });
     }
-    await Card.findByIdAndDelete(id);
-
+    const deleted = await Card.findByIdAndDelete(id);
+    if (!deleted) {
+      return res.status(404).json({ status: 'failed', message: 'There is no such Id' });
+    }
     res.status(204).json({
       status: 'item has been deleted',
       data: null
@@ -105,23 +113,6 @@ exports.getMyCards = async (req, res) => {
       status: 'success',
       results: myCards.length,
       data: myCards
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err.message
-    });
-  }
-};
-
-exports.getMyCardsJoi = async (req, res) => {
-  try {
-    const currentUserId = req.user.id;
-    const allUserCards = await Card.find({ user_id: currentUserId });
-    res.status(200).json({
-      status: 'succes',
-      results: allUserCards.length,
-      data: allUserCards
     });
   } catch (err) {
     res.status(404).json({

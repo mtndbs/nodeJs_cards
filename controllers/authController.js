@@ -2,6 +2,7 @@
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto'); // for more simple hashed token (reseting password)
 const User = require('./../models/userModel');
 const sendEmail = require('./../utils/email');
 // Token sign function
@@ -19,9 +20,7 @@ exports.protector = async (req, res, next) => {
     }
 
     if (!token) {
-      return res
-        .status(401)
-        .json({ status: 'Fail', message: 'You are not logged in! Please log in to get access' });
+      return res.status(401).json({ status: 'Fail', message: 'You are not logged in! Please log in to get access' });
     }
 
     // verifiy token
@@ -49,6 +48,7 @@ exports.protector = async (req, res, next) => {
 exports.signUp = async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
+
     const newUser = await User.create({ name, email, password, confirmPassword });
     res.status(200).json({
       status: 'success',
@@ -56,13 +56,19 @@ exports.signUp = async (req, res) => {
       message: 'user has been registered successfully'
     });
   } catch (err) {
-    res.status(401).json({
-      status: 'fail',
-      message: err.message
-    });
+    if (err.name === 'MongoError' && err.code === 11000) {
+      res.status(409).json({
+        status: 'fail',
+        message: 'This Email already exist'
+      });
+    } else {
+      res.status(401).json({
+        status: 'fail',
+        message: err.message
+      });
+    }
   }
 };
-
 exports.logIn = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -76,9 +82,7 @@ exports.logIn = async (req, res) => {
     }
     const token = signToken(user._id, user.biz);
     if (!token) {
-      return res
-        .status(401)
-        .json({ status: 'There was problem with your authentication, please sign again' });
+      return res.status(401).json({ status: 'There was problem with your authentication, please sign again' });
     }
     res.status(200).json({
       status: 'success',
@@ -105,7 +109,7 @@ exports.forgotPassword = async (req, res) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+  const resetURL = `${req.protocol}://${req.get('host')}/api/users/resetpassword/${resetToken}`;
 
   const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
 
@@ -127,6 +131,40 @@ exports.forgotPassword = async (req, res) => {
     res.status(500).json({
       status: 'fail',
       message: 'There was an error with the Email sending, please try again'
+    });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
+
+    console.log(hashedToken);
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() }
+    });
+    console.log(user);
+    if (!user) {
+      return res.status(400).json({ status: 'fail', message: 'Token is invalid or has expired' });
+    }
+    user.password = req.body.password;
+    user.confirmPassword = req.body.confirmPassword;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+    const token = signToken(user._id, user.biz);
+    res.status(200).json({
+      status: 'success',
+      data: token
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err.message
     });
   }
 };
