@@ -24,10 +24,11 @@ exports.protector = async (req, res, next) => {
         .json({ status: 'Fail', message: 'You are not logged in! Please log in to get access' });
     }
 
-    //  Verifiy token
+    // verifiy token
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    // sending the user details inside the req object to the endpoint
     req.user = decoded;
-    //Check if user still exists
+    //check if user still exists
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
       return res.status(401).json({
@@ -49,10 +50,8 @@ exports.signUp = async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
     const newUser = await User.create({ name, email, password, confirmPassword });
-    // const { name, email, _id } = newUser;
     res.status(200).json({
       status: 'success',
-      // data: newUser,
       data: _.pick(newUser, ['_id', 'name', 'email']),
       message: 'user has been registered successfully'
     });
