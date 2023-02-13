@@ -1,7 +1,7 @@
 שלום בודק יקר!
 כמה נקודות חשובות לגבי העבודה
 
-- In this project I chose to use mongoose.shcema and npm validator for validation, (not with joi)
+- In this project I chose to use pre(save) mongoose.shcema and npm Validator for validation, (not with joi)
 
 - כמובן שהכל עובד כתיקונו , הקוד יותר קרי לדעתי וכמו שתראה בעצמך, בכל אופן הכנתי סכמה אחת לדוגמה אם הייתי משתמש בג'וי זה נמצא במודלס
 
