@@ -29,7 +29,12 @@ const cardSchema = new mongoose.Schema({
   },
   bPhoto: {
     type: String,
-    default: `https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png`
+    default: function() {
+      if (!this.bPhoto) {
+        return `https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png`;
+      }
+      return this.bPhoto;
+    }
   },
   cardNum: {
     type: Number,

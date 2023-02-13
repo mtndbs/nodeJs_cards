@@ -22,8 +22,8 @@ exports.createCard = async (req, res) => {
   try {
     const decoded = req.user;
     const { id } = decoded.id;
-    const { bName, bDiscription, bAdress, bPhone } = req.body;
-    const newCard = await Card.create({ bName, bDiscription, bAdress, bPhone, id }); // didnt use only with req.body, because security isues
+    const { bName, bDiscription, bAdress, bPhone, bPhoto } = req.body;
+    const newCard = await Card.create({ bName, bDiscription, bAdress, bPhone, id, bPhoto }); // didnt use only with req.body, because security isues
 
     res.status(200).json({
       status: 'success',
