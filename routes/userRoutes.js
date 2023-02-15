@@ -8,6 +8,7 @@ router.post('/signup', authController.signUp); //http://localhost:7800/api/users
 router.post('/login', authController.logIn); //http://localhost:7800/api/users/login
 router.get('/me', authController.protector, userController.getUser); // http://localhost:7800/api/users/me
 
+router.post('/updatepassword', authController.protector, authController.updatePassword);
 router.post('/forgotpassword', authController.forgotPassword);
 router.patch('/resetpassword/:token', authController.resetPassword);
 // פה עתיד להיות עריכת משתמש וכו, לא התבקש בעבודה

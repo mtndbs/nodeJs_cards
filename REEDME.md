@@ -1,13 +1,18 @@
 שלום בודק יקר!
 כמה נקודות חשובות לגבי העבודה
 
+- In this project I used "Eslint" for better coding structure, also with Prettier.
 - In this project I chose to use pre(save) mongoose.shcema and npm Validator for validation, (not with joi)
 
-- כמובן שהכל עובד כתיקונו , הקוד יותר קרי לדעתי וכמו שתראה בעצמך, בכל אופן הכנתי סכמה אחת לדוגמה אם הייתי משתמש בג'וי זה נמצא במודלס
+- כמובן שהכל עובד כתיקונו , הקוד יותר קרי לדעתי וכמו שתראה בעצמך, בכל אופן הכנתי סכמה אחת לדוגמה אם הייתי משתמש בג'וי ,היא נמצאת במודלס
 
-- i used Eslint for better coding structure, also with Prettier.
+* בעבודה הוספתי עוד נקודות קצה שלא התבקשו בעבודה כמו: איפוס סיסמה על ידי אימות דוא"ל, החלפת סיסמה ועוד דברים שיתוספו בהמשך "
 
-- בקונטרולרס" תמצא אם כל האנד-פוינטס ע"פ נושאים "
+---
+
+- הכנתי לך את כל הניתובים ב"פוסט-מאן" ב"אי.פי.אי", נשאר לעשות רק "אימפורט" והחיים קלים
+
+- https://api.postman.com/collections/24760583-2e4292f3-bf20-42d8-9be9-bc2134e5ad28?access_key=PMAT-01GS8FC6M1Z00Y93NKJCTD0DH2
 
 ---
 

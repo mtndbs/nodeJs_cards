@@ -49,6 +49,10 @@ exports.signUp = async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
 
+    const duplicateEmail = await User.findOne({ email: email });
+    if (duplicateEmail) {
+      return res.status(409).json({ status: 'fail', message: 'This Email already exist' });
+    }
     const newUser = await User.create({ name, email, password, confirmPassword });
     res.status(200).json({
       status: 'success',
@@ -56,24 +60,17 @@ exports.signUp = async (req, res) => {
       message: 'user has been registered successfully'
     });
   } catch (err) {
-    if (err.name === 'MongoError' && err.code === 11000) {
-      res.status(409).json({
-        status: 'fail',
-        message: 'This Email already exist'
-      });
-    } else {
-      res.status(401).json({
-        status: 'fail',
-        message: err.message
-      });
-    }
+    res.status(401).json({
+      status: 'fail',
+      message: err.message
+    });
   }
 };
 exports.logIn = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ status: 'no email and password' });
+      return res.status(400).json({ status: 'There is no email or password' });
     }
 
     const user = await User.findOne({ email }).select('+password'); // +password because password set to select false
@@ -142,12 +139,10 @@ exports.resetPassword = async (req, res) => {
       .update(req.params.token)
       .digest('hex');
 
-    console.log(hashedToken);
     const user = await User.findOne({
       passwordResetToken: hashedToken,
       passwordResetExpires: { $gt: Date.now() }
     });
-    console.log(user);
     if (!user) {
       return res.status(400).json({ status: 'fail', message: 'Token is invalid or has expired' });
     }
@@ -167,4 +162,24 @@ exports.resetPassword = async (req, res) => {
       message: err.message
     });
   }
+};
+
+exports.updatePassword = async (req, res) => {
+  const { password, confirmPassword, currentPassword } = req.body;
+  if (!password || !confirmPassword || !currentPassword) {
+    return res.status(404).json({ status: 'missing one of the values' });
+  }
+  const user = await User.findById(req.user.id).select('+password');
+  if (!user || !(await bcrypt.compare(currentPassword, user.password))) {
+    return res.status(400).json({ status: 'email or passwrod are invalid' });
+  }
+  user.password = password;
+  user.confirmPassword = confirmPassword;
+  await user.save();
+
+  const token = signToken(user._id, user.biz);
+  res.status(201).json({
+    status: 'success',
+    token: token // At real will be send as secret cookie to the client
+  });
 };
