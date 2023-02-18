@@ -28,6 +28,16 @@ mongoose
 
 app.use('/api/users', userRouter);
 app.use('/api/cards', cardRouter);
+
+// handling all routes errors that are not in the application
+app.all('*', (req, res, next) => {
+  res.status(404).json({
+    status: 'fail',
+    message: `Can't find ${req.originalUrl} at this Server!`
+  });
+  next();
+});
+
 app.listen(port, () => {
   console.log(`you're listening to port ${port}`);
 });

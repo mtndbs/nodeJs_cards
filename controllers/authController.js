@@ -20,7 +20,10 @@ exports.protector = async (req, res, next) => {
     }
 
     if (!token) {
-      return res.status(401).json({ status: 'Fail', message: 'You are not logged in! Please log in to get access' });
+      return res.status(401).json({
+        status: 'Fail',
+        message: 'You are not logged in! Please log in to get access'
+      });
     }
 
     // verifiy token
@@ -51,7 +54,9 @@ exports.signUp = async (req, res) => {
 
     const duplicateEmail = await User.findOne({ email: email });
     if (duplicateEmail) {
-      return res.status(409).json({ status: 'fail', message: 'This Email already exist' });
+      return res
+        .status(409)
+        .json({ status: 'fail', message: 'This Email already exist' });
     }
     const newUser = await User.create({ name, email, password, confirmPassword });
     res.status(200).json({
@@ -79,14 +84,23 @@ exports.logIn = async (req, res) => {
     }
     const token = signToken(user._id, user.biz);
     if (!token) {
-      return res.status(401).json({ status: 'There was problem with your authentication, please sign again' });
+      return res.status(401).json({
+        status: 'There was problem with your authentication, please sign again'
+      });
     }
+    const cookieOptions = {
+      expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days
+      // secure: true,  //on development, secure will be false
+      httpOnly: true
+    };
+    res.cookie('jwt', token, cookieOptions);
+
     res.status(200).json({
       status: 'success',
-      token: token // At real will be send as secret cookie to the client
+      token: token
     });
   } catch (err) {
-    res.status(404).json({
+    res.status(err.statusCode).json({
       status: 'fail',
       message: err.message
     });
@@ -106,7 +120,9 @@ exports.forgotPassword = async (req, res) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const resetURL = `${req.protocol}://${req.get('host')}/api/users/resetpassword/${resetToken}`;
+  const resetURL = `${req.protocol}://${req.get(
+    'host'
+  )}/api/users/resetpassword/${resetToken}`;
 
   const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
 
@@ -144,7 +160,9 @@ exports.resetPassword = async (req, res) => {
       passwordResetExpires: { $gt: Date.now() }
     });
     if (!user) {
-      return res.status(400).json({ status: 'fail', message: 'Token is invalid or has expired' });
+      return res
+        .status(400)
+        .json({ status: 'fail', message: 'Token is invalid or has expired' });
     }
     user.password = req.body.password;
     user.confirmPassword = req.body.confirmPassword;

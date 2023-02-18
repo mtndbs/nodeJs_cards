@@ -66,7 +66,7 @@ exports.upDateCard = async (req, res) => {
       return res.status(400).json({ message: 'problem with URL details' });
     }
     const oneCard = await Card.findByIdAndUpdate(id, req.body, {
-      new: true,
+      new: true, // new for returning the new object instead of the old one
       runValidators: true // running schema validation also when updating
     });
     if (!oneCard) {
