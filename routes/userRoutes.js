@@ -11,10 +11,8 @@ router.get('/me', authController.protector, userController.getUser); // http://l
 router.post('/updatepassword', authController.protector, authController.updatePassword);
 router.post('/forgotpassword', authController.forgotPassword);
 router.patch('/resetpassword/:token', authController.resetPassword);
-// פה עתיד להיות עריכת משתמש וכו, לא התבקש בעבודה
-router // http://localhost:7800/api/users
-  .route('/')
-  .get(authController.protector)
-  .post(authController.protector);
+
+// עריכת משתמש שם ודוא"ל, לא התבקש במשימה
+router.patch('/updateMe', authController.protector, userController.updateUser);
 
 module.exports = router;
