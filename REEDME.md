@@ -1,6 +1,6 @@
 # שלום בודק יקר!
 
-# כמה נקודות חשובות לגבי העבודה
+## כמה נקודות חשובות לגבי העבודה
 
 - In this project I used "Eslint" for better coding structure, also with Prettier.
 
@@ -18,7 +18,7 @@
 
 ---
 
-# ניתובים על פי המשימות
+## ניתובים על פי המשימות
 
 - end point 1: POST
   http://localhost:7800/api/users/signup
