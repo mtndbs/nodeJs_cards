@@ -6,10 +6,16 @@ const crypto = require('crypto'); // for more simple hashed token (reseting pass
 const User = require('./../models/userModel');
 const sendEmail = require('./../utils/email');
 // Token sign function
+
 const signToken = (id, biz) => {
   return jwt.sign({ id, biz }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN
   });
+};
+const cookieOptions = {
+  expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days
+  // secure: true,  //on development, secure will be false
+  httpOnly: true
 };
 // ============================== secuirity middleware ===================================
 exports.protector = async (req, res, next) => {
@@ -88,11 +94,7 @@ exports.logIn = async (req, res) => {
         status: 'There was problem with your authentication, please sign again'
       });
     }
-    const cookieOptions = {
-      expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days
-      // secure: true,  //on development, secure will be false
-      httpOnly: true
-    };
+
     res.cookie('jwt', token, cookieOptions);
 
     res.status(200).json({
@@ -193,11 +195,14 @@ exports.updatePassword = async (req, res) => {
   }
   user.password = password;
   user.confirmPassword = confirmPassword;
+
   await user.save();
 
   const token = signToken(user._id, user.biz);
+  res.cookie('jwt', token, cookieOptions);
+
   res.status(201).json({
     status: 'success',
-    token: token // At real will be send as secret cookie to the client
+    token: token
   });
 };
