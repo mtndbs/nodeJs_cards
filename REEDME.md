@@ -1,12 +1,14 @@
-שלום בודק יקר!
+## שלום בודק יקר!
+
 כמה נקודות חשובות לגבי העבודה
 
-- In this project I used "Eslint" for better coding structure, also with Prettier.
-- In this project I chose to use pre(save) mongoose.shcema and npm Validator for validation, (not with joi)
+# In this project I used "Eslint" for better coding structure, also with Prettier.
+
+# In this project I chose to use pre(save) mongoose.shcema and npm Validator for validation, (not with joi)
 
 - כמובן שהכל עובד כתיקונו , הקוד יותר קרי לדעתי וכמו שתראה בעצמך, בכל אופן הכנתי סכמה אחת לדוגמה אם הייתי משתמש בג'וי ,היא נמצאת במודלס
 
-* בעבודה הוספתי עוד נקודות קצה שלא התבקשו בעבודה כמו: איפוס סיסמה על ידי אימות דוא"ל, החלפת סיסמה ועוד דברים שיתוספו בהמשך "
+# בעבודה הוספתי עוד נקודות קצה ומודולים שלא התבקשו בעבודה כמו: איפוס סיסמה על ידי אימות דוא"ל, החלפת סיסמה, הגבלת בקשות, אבטחה ועוד דברים שיתוספו בהמשך "
 
 ---
 
@@ -16,14 +18,14 @@
 
 ---
 
-ניתובים על פי המשימות:
+# ניתובים על פי המשימות
 
 - end point 1: POST
   http://localhost:7800/api/users/signup
 
 * שים לב שצריך לשלוח גם אימות סיסמה !! --
 
-- דוגמה למבנה בג'ייסון
+* דוגמה למבנה בג'ייסון
   {
   "name":"test",
   "email":"test@gmail.com",
