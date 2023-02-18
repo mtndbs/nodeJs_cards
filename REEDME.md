@@ -1,14 +1,14 @@
 # שלום בודק יקר!
 
-כמה נקודות חשובות לגבי העבודה
+# כמה נקודות חשובות לגבי העבודה
 
-## In this project I used "Eslint" for better coding structure, also with Prettier.
+- In this project I used "Eslint" for better coding structure, also with Prettier.
 
-## In this project I chose to use pre(save) mongoose.shcema and npm Validator for validation, (not with joi)
+- In this project I chose to use pre(save) mongoose.shcema and npm Validator for validation, (not with joi)
 
-- כמובן שהכל עובד כתיקונו , הקוד יותר קרי לדעתי וכמו שתראה בעצמך, בכל אופן הכנתי סכמה אחת לדוגמה אם הייתי משתמש בג'וי ,היא נמצאת במודלס
+* כמובן שהכל עובד כתיקונו , הקוד יותר קרי לדעתי וכמו שתראה בעצמך, בכל אופן הכנתי סכמה אחת לדוגמה אם הייתי משתמש בג'וי ,היא נמצאת במודלס
 
-## בעבודה הוספתי עוד נקודות קצה ומודולים שלא התבקשו בעבודה כמו: איפוס סיסמה על ידי אימות דוא"ל, החלפת סיסמה, הגבלת בקשות, אבטחה ועוד דברים שיתוספו בהמשך "
+- בעבודה הוספתי עוד נקודות קצה ומודולים שלא התבקשו בעבודה כמו: איפוס סיסמה על ידי אימות דוא"ל, החלפת סיסמה, הגבלת בקשות, אבטחה ועוד דברים שיתוספו בהמשך "
 
 ---
 
