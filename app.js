@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const rateLimiter = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 dotenv.config({ path: './config.env' });
 const app = express();
@@ -14,15 +16,18 @@ const limiter = rateLimiter({
   windowMs: 60 * 60 * 1000,
   message: 'To many request from this IP , please try again later'
 });
-// Global middleWare
+// ================= Global middleWare =================
 // HELMET secure your Express apps by setting various HTTP headers
 app.use(helmet());
-// Limit the http request from the same
+// Limit the http request fro
 app.use('/api', limiter);
-app.use(express.json());
+app.use(express.json({ limit: '20kb' }));
+app.use(mongoSanitize());
+app.use(xss());
+
+// ================= Global middleWare =================
 
 const userRouter = require('./routes/userRoutes');
-
 const cardRouter = require('./routes/bCardRoutes');
 
 mongoose
