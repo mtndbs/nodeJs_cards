@@ -8,9 +8,9 @@ router.post('/signup', authController.signUp); //http://localhost:7800/api/users
 router.post('/login', authController.logIn); //http://localhost:7800/api/users/login
 router.get('/me', authController.protector, userController.getUser); // http://localhost:7800/api/users/me
 
-router.post('/updatepassword', authController.protector, authController.updatePassword);
-router.post('/forgotpassword', authController.forgotPassword);
-router.patch('/resetpassword/:token', authController.resetPassword);
+router.post('/updatePassword', authController.protector, authController.updatePassword);
+router.post('/forgotPassword', authController.forgotPassword);
+router.patch('/resetPassword/:token', authController.resetPassword);
 
 // עריכת משתמש שם ודוא"ל, לא התבקש במשימה
 router.patch('/updateMe', authController.protector, userController.updateUser);
