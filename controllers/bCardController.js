@@ -20,10 +20,17 @@ exports.getAllcards = async (req, res) => {
 
 exports.createCard = async (req, res) => {
   try {
-    const decoded = req.user;
-    const { id } = decoded.id;
+    // eslint-disable-next-line camelcase
+    const user_id = req.user.id;
     const { bName, bDiscription, bAdress, bPhone, bPhoto } = req.body;
-    const newCard = await Card.create({ bName, bDiscription, bAdress, bPhone, id, bPhoto }); // didnt use only with req.body, because security isues
+    const newCard = await Card.create({
+      bName,
+      bDiscription,
+      bAdress,
+      bPhone,
+      user_id,
+      bPhoto
+    }); // didnt use only with req.body, because security isues
 
     res.status(200).json({
       status: 'success',
