@@ -9,7 +9,7 @@ const xss = require('xss-clean');
 
 dotenv.config({ path: './config.env' });
 const app = express();
-const port = process.env.MY_PORT;
+const port = process.env.PORT;
 
 const limiter = rateLimiter({
   max: 120,
