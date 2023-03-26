@@ -174,26 +174,6 @@ module.exports = {
 
     res.status(200).json(plan);
   },
-  //   monthly: async function(req, res) {
-  //     const month = req.params.month * 1; // 1-12
-  //     const currentYear = new Date().getFullYear();
-
-  //     const plan = await Task.aggregate([
-  //       {
-  //         $match: {
-  //           finishTime: {
-  //             $gte: new Date(`${currentYear}-${month}-01`),
-  //             $lte: new Date(`${currentYear}-${month}-31`)
-  //           }
-  //         }
-  //       }
-  //     ]);
-  //     res.status(200).json({
-  //       status: 'success',
-  //       results: plan.length,
-  //       data: plan
-  //     });
-  //   },
 
   getCyclic: async function(req, res) {
     const cyclic = await Task.find({ cyclic: true });

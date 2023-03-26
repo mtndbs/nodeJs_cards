@@ -38,7 +38,7 @@ app.use(xss());
 const userRouter = require('./routes/userRoutes');
 const cardRouter = require('./routes/bCardRoutes');
 const tasksRouter = require('./routes/tasksRouter');
-const projectsRouter = require('./routes/tasksRouter');
+const projectsRouter = require('./routes/projectsRouter');
 const authController = require('./controllers/authController');
 
 mongoose
