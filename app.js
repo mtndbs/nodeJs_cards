@@ -6,6 +6,9 @@ const rateLimiter = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
+const morgan = require('morgan');
+
+const cors = require('cors');
 
 dotenv.config({ path: './config.env' });
 const app = express();
@@ -17,6 +20,11 @@ const limiter = rateLimiter({
   message: 'To many request from this IP , please try again later'
 });
 // ================= Global middleWare =================
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+app.use(cors());
+
 // HELMET secure your Express apps by setting various HTTP headers
 app.use(helmet());
 // Limit the http request fro
@@ -29,6 +37,9 @@ app.use(xss());
 
 const userRouter = require('./routes/userRoutes');
 const cardRouter = require('./routes/bCardRoutes');
+const tasksRouter = require('./routes/tasksRouter');
+const projectsRouter = require('./routes/tasksRouter');
+const authController = require('./controllers/authController');
 
 mongoose
   .connect(process.env.MONGO_DB, {
@@ -47,6 +58,8 @@ mongoose
 
 app.use('/api/users', userRouter);
 app.use('/api/cards', cardRouter);
+app.use('/api/tasks', authController.protector, tasksRouter);
+app.use('/api/projects', authController.protector, projectsRouter);
 
 // handling all routes errors that are not in the application
 app.all('*', (req, res, next) => {
