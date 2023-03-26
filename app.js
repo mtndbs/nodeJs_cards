@@ -35,7 +35,8 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    dbName: process.env.DBNAME
   })
   .then(() => {
     console.log(`connection to mongoose  succeed ! `);

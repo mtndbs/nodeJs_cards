@@ -1,5 +1,34 @@
 // eslint-disable-next-line node/no-unsupported-features/node-builtins
+const multer = require('multer');
 const Card = require('./../models/bCardModel');
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'storage/img/cards');
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+  }
+});
+
+const multerFilter = (req, file, cb) => {
+  try {
+    if (file.mimetype && file.mimetype.startsWith('image')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid mime type'), false);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+
+exports.uploadCardPhoto = upload.single('bPhoto');
 
 exports.getAllcards = async (req, res) => {
   try {
@@ -21,6 +50,9 @@ exports.getAllcards = async (req, res) => {
 exports.createCard = async (req, res) => {
   try {
     // eslint-disable-next-line camelcase
+    console.log(req.file);
+
+    // eslint-disable-next-line camelcase
     const user_id = req.user.id;
     const { bName, bDiscription, bAdress, bPhone, bPhoto } = req.body;
     const newCard = await Card.create({
@@ -29,7 +61,7 @@ exports.createCard = async (req, res) => {
       bAdress,
       bPhone,
       user_id,
-      bPhoto
+      bPhoto: req.file ? req.file.filename : bPhoto
     }); // didnt use only with req.body, because security isues
 
     res.status(200).json({

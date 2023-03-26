@@ -7,7 +7,11 @@ const authController = require('./../controllers/authController');
 router
   .route('/') //http://localhost:7800/api/cards
   .get(authController.protector, cardController.getAllcards)
-  .post(authController.protector, cardController.createCard);
+  .post(
+    authController.protector,
+    cardController.uploadCardPhoto,
+    cardController.createCard
+  );
 
 //http://localhost:7800/api/cards/my
 router.get('/my', authController.protector, cardController.getMyCards);
