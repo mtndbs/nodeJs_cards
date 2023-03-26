@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
+    "start:production": "node app.js",
     "debug": "ndb app.js"
   },
   "author": "matan dabush",
