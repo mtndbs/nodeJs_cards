@@ -12,15 +12,6 @@ const projectSchema = new mongoose.Schema({
     minlength: 2,
     maxlength: 1024
   },
-  image: {
-    url: {
-      type: String,
-      required: true,
-      minlength: 2,
-      maxlength: 1024
-    },
-    alt: { type: String, required: true, minlength: 2, maxlength: 256 }
-  },
   status: {
     type: String,
     minlength: 3,
@@ -28,6 +19,18 @@ const projectSchema = new mongoose.Schema({
   },
   management: {
     type: String
+  },
+  Subtasks: {
+    type: Array || String
+  },
+
+  image: {
+    url: {
+      type: String,
+      minlength: 2,
+      maxlength: 1024
+    },
+    alt: { type: String, minlength: 2, maxlength: 256 }
   }
 });
 

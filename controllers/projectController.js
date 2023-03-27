@@ -49,9 +49,14 @@ module.exports = {
           .required(),
         status: joi.string(),
         manager: joi.string(),
+        subtasks: joi.allow(),
         image: joi.allow(),
         date: joi.allow()
       });
+
+      if (req.body.subtasks.includes(',')) {
+        req.body.subtasks = req.body.subtasks.split(',');
+      }
 
       const { error, value } = schema.validate(req.body);
 
