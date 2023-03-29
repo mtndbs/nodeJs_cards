@@ -10,6 +10,8 @@ const morgan = require('morgan');
 
 const cors = require('cors');
 
+require('./cron/cronApp');
+
 dotenv.config({ path: './config.env' });
 const app = express();
 const port = process.env.PORT;
