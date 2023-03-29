@@ -2,7 +2,7 @@ const { CronJob } = require('cron/lib/cron');
 const { Task } = require('../models/Task');
 const Cyclic = require('../models/CyclicSchema');
 
-const job = new CronJob('* * * 30 * *', async () => {
+const job = new CronJob('0 31 0 30 * *', async () => {
   const d = new Date();
   console.log('every first on month:', d);
   const baseCyclic = await Cyclic.find({})
@@ -17,4 +17,4 @@ const job = new CronJob('* * * 30 * *', async () => {
   console.log(baseCyclic);
 });
 
-// job.start();
+job.start();
