@@ -17,4 +17,4 @@ const job = new CronJob('* * * 30 * *', async () => {
   console.log(baseCyclic);
 });
 
-job.start();
+// job.start();

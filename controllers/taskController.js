@@ -1,4 +1,6 @@
+/* eslint-disable no-plusplus */
 const joi = require('joi');
+const { forEach } = require('lodash');
 const { Task } = require('../models/Task');
 // const Cyclic = require('../models/CyclicSchema');
 
@@ -7,6 +9,44 @@ module.exports = {
     try {
       const result = await Task.find({}).sort({ urgency: -1 });
       res.json(result);
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({ error: 'error getting tasks' });
+    }
+  },
+
+  // "category": "Task",
+  //       "complete": false,
+  //       "urgency": true,
+  //       "_id": "64214cd010ea8740cc07b396",
+  //       "title": "some",
+  //       "description": "some task urgency 12:00",
+  //       "finishTime": "2023-03-27T09:00:12.000Z",
+
+  // start: `startOfDay(${finishTime})`,
+  // title: description,
+  // color: `{...colors['yellow'] }`,
+  // actions: `this.actions`
+
+  getTEST: async function(req, res, next) {
+    try {
+      const results = await Task.find({})
+        .select('-urgency')
+        .select('-complete')
+        .select('-_id')
+        .select('-category')
+        .select('-__v');
+
+      const myCalendarArr = [];
+      results.forEach(object => {
+        const item = {
+          title: object.description,
+          start: object.finishTime
+        };
+        myCalendarArr.push(item);
+      });
+
+      res.json(myCalendarArr);
     } catch (err) {
       console.log(err);
       res.status(400).json({ error: 'error getting tasks' });

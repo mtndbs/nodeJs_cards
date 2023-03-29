@@ -9,6 +9,8 @@ router.get('/cyclicBase', cyclics.getCyclicBase);
 router.post('/cyclicBase', cyclics.addCyclicBase);
 router.get('/bootstrapCyclic', cyclics.bootstrapCyclic);
 
+router.get('/test', tasks.getTEST);
+
 router.post('/', tasks.addNew);
 router.get('/', tasks.getAll);
 router.get('/daily', tasks.daily);
