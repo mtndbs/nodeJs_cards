@@ -17,7 +17,7 @@ const app = express();
 const port = process.env.PORT;
 
 const limiter = rateLimiter({
-  max: 120,
+  max: 460,
   windowMs: 60 * 60 * 1000,
   message: 'To many request from this IP , please try again later'
 });
@@ -42,6 +42,9 @@ const cardRouter = require('./routes/bCardRoutes');
 const tasksRouter = require('./routes/tasksRouter');
 const projectsRouter = require('./routes/projectsRouter');
 const authController = require('./controllers/authController');
+const employeesRouter = require('./routes/employees');
+const customersRouter = require('./routes/customers');
+const openViewRouter = require('./routes/openEmployeeRoute');
 
 mongoose
   .connect(process.env.MONGO_DB, {
@@ -60,8 +63,11 @@ mongoose
 
 app.use('/api/users', userRouter);
 app.use('/api/cards', cardRouter);
+app.use('/api/employView', openViewRouter);
 app.use('/api/tasks', authController.protector, tasksRouter);
 app.use('/api/projects', authController.protector, projectsRouter);
+app.use('/api/employees', authController.protector, employeesRouter);
+app.use('/api/customers', authController.protector, customersRouter);
 
 // handling all routes errors that are not in the application
 app.all('*', (req, res, next) => {

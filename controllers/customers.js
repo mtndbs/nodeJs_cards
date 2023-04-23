@@ -1,14 +1,16 @@
+/* eslint-disable no-throw-literal */
 const joi = require('joi');
-const { Project } = require('../models/Project');
+
+const { Customer } = require('../models/Customer');
 
 module.exports = {
   getAll: async function(req, res, next) {
     try {
-      const result = await Project.find({});
+      const result = await Customer.find({});
       res.json(result);
     } catch (err) {
       console.log(err);
-      res.status(400).json({ error: 'error getting projects' });
+      res.status(400).json({ error: 'error getting customers' });
     }
   },
 
@@ -25,9 +27,9 @@ module.exports = {
         throw `error get details`;
       }
 
-      const project = await Project.findById(value.id);
-      if (!project) throw 'Invalid project id, no such project.';
-      res.json(project);
+      const customer = await Customer.findById(value.id);
+      if (!customer) throw 'Invalid customer id, no such customer.';
+      res.json(customer);
     } catch (err) {
       res.status(400).json({ error: 'Invalid data' });
       console.log(`Error: ${err}`);
@@ -37,27 +39,32 @@ module.exports = {
   addNew: async function(req, res, next) {
     try {
       const schema = joi.object({
-        title: joi
+        firstName: joi
           .string()
           .min(2)
-          .max(256)
+          .max(200)
           .required(),
-        description: joi
+        lastName: joi
           .string()
           .min(2)
-          .max(1024)
+          .max(200)
           .required(),
-        status: joi.string(),
-        manager: joi.string(),
-        subtasks: joi.allow(),
-        image: joi.allow(),
-        date: joi.allow(),
+        phone: joi
+          .string()
+          .min(9)
+          .max(12)
+          .required(),
+        email: joi
+          .string()
+          .min(6)
+          .max(255)
+          .required(),
+        address: joi
+          .string()
+          .min(6)
+          .max(350),
         userId: joi.allow()
       });
-
-      if (req.body.subtasks.includes(',')) {
-        req.body.subtasks = req.body.subtasks.split(',');
-      }
 
       req.body.userId = req.user.id;
 
@@ -65,15 +72,15 @@ module.exports = {
 
       if (error) {
         console.log(error.details[0].message);
-        throw 'error add project';
+        throw 'error add customer';
       }
 
-      const project = new Project(value);
-      const newProject = await project.save();
-      res.json(newProject);
+      const customer = new Customer(value);
+      const newCustomer = await customer.save();
+      res.json(newCustomer);
     } catch (err) {
       console.log(err.message);
-      res.status(400).json({ error: `error adding project` });
+      res.status(400).json({ error: `error adding customer` });
     }
   },
 
@@ -81,17 +88,26 @@ module.exports = {
     try {
       const schema = joi
         .object({
-          title: joi
+          firstName: joi
             .string()
             .min(2)
-            .max(256)
-            .required(),
-          description: joi
+            .max(200),
+          lastName: joi
             .string()
             .min(2)
-            .max(1024)
-            .required(),
-          complete: joi.boolean()
+            .max(200),
+          phone: joi
+            .string()
+            .min(9)
+            .max(12),
+          email: joi
+            .string()
+            .min(6)
+            .max(255),
+          address: joi
+            .string()
+            .min(6)
+            .max(350)
         })
         .min(1);
 
@@ -99,20 +115,20 @@ module.exports = {
 
       if (error) {
         console.log(error.details[0].message);
-        throw 'error updating project';
+        throw 'error updating customer';
       }
 
       const filter = {
         _id: req.params.id
       };
 
-      const project = await Project.findOneAndUpdate(filter, value);
-      if (!project) throw 'No project with this ID in the database';
-      const updated = await Project.findById(project._id);
+      const customer = await Customer.findOneAndUpdate(filter, value);
+      if (!customer) throw 'No customer with this ID in the database';
+      const updated = await Customer.findById(customer._id);
       res.json(updated);
     } catch (err) {
       console.log(err.message);
-      res.status(400).json({ error: `error updating details` });
+      res.status(400).json({ error: err.message });
     }
   },
 
@@ -126,10 +142,10 @@ module.exports = {
 
       if (error) {
         console.log(error.details[0].message);
-        throw `error delete project`;
+        throw `error delete customer`;
       }
 
-      const deleted = await Project.findOneAndRemove({
+      const deleted = await Customer.findOneAndRemove({
         _id: value.id
       });
 
@@ -137,7 +153,7 @@ module.exports = {
       res.json(deleted);
     } catch (err) {
       console.log(err.message);
-      res.status(400).json({ error: `error delete project` });
+      res.status(400).json({ error: `error delete customer` });
     }
   }
 };

@@ -101,7 +101,8 @@ exports.logIn = async (req, res) => {
 
     res.status(200).json({
       status: 'success',
-      token: token
+      token: token,
+      user: _.pick(user, ['name', 'email'])
     });
   } catch (err) {
     res.status(500).json({

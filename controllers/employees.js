@@ -1,14 +1,14 @@
 const joi = require('joi');
-const { Project } = require('../models/Project');
+const { Employee } = require('../models/Employee');
 
 module.exports = {
   getAll: async function(req, res, next) {
     try {
-      const result = await Project.find({});
+      const result = await Employee.find({});
       res.json(result);
     } catch (err) {
       console.log(err);
-      res.status(400).json({ error: 'error getting projects' });
+      res.status(400).json({ error: 'error getting employees' });
     }
   },
 
@@ -25,9 +25,9 @@ module.exports = {
         throw `error get details`;
       }
 
-      const project = await Project.findById(value.id);
-      if (!project) throw 'Invalid project id, no such project.';
-      res.json(project);
+      const employee = await Employee.findById(value.id);
+      if (!employee) throw 'Invalid employee id, no such employee.';
+      res.json(employee);
     } catch (err) {
       res.status(400).json({ error: 'Invalid data' });
       console.log(`Error: ${err}`);
@@ -37,43 +37,39 @@ module.exports = {
   addNew: async function(req, res, next) {
     try {
       const schema = joi.object({
-        title: joi
+        name: joi
           .string()
           .min(2)
-          .max(256)
+          .max(200)
           .required(),
-        description: joi
+        phone: joi
           .string()
-          .min(2)
-          .max(1024)
+          .min(9)
+          .max(12)
           .required(),
-        status: joi.string(),
-        manager: joi.string(),
-        subtasks: joi.allow(),
-        image: joi.allow(),
-        date: joi.allow(),
+        email: joi
+          .string()
+          .min(6)
+          .max(255)
+          .required(),
+        birthday: joi.string(),
         userId: joi.allow()
       });
-
-      if (req.body.subtasks.includes(',')) {
-        req.body.subtasks = req.body.subtasks.split(',');
-      }
-
       req.body.userId = req.user.id;
 
       const { error, value } = schema.validate(req.body);
 
       if (error) {
         console.log(error.details[0].message);
-        throw 'error add project';
+        throw 'error add employee';
       }
 
-      const project = new Project(value);
-      const newProject = await project.save();
-      res.json(newProject);
+      const employee = new Employee(value);
+      const newEmployee = await employee.save();
+      res.json(newEmployee);
     } catch (err) {
       console.log(err.message);
-      res.status(400).json({ error: `error adding project` });
+      res.status(400).json({ error: `error adding employee` });
     }
   },
 
@@ -81,17 +77,19 @@ module.exports = {
     try {
       const schema = joi
         .object({
-          title: joi
+          name: joi
             .string()
             .min(2)
-            .max(256)
-            .required(),
-          description: joi
+            .max(200),
+          phone: joi
             .string()
-            .min(2)
-            .max(1024)
-            .required(),
-          complete: joi.boolean()
+            .min(9)
+            .max(12),
+          email: joi
+            .string()
+            .min(6)
+            .max(255),
+          birthday: joi.string()
         })
         .min(1);
 
@@ -99,16 +97,16 @@ module.exports = {
 
       if (error) {
         console.log(error.details[0].message);
-        throw 'error updating project';
+        throw 'error updating employee';
       }
 
       const filter = {
         _id: req.params.id
       };
 
-      const project = await Project.findOneAndUpdate(filter, value);
-      if (!project) throw 'No project with this ID in the database';
-      const updated = await Project.findById(project._id);
+      const employee = await Employee.findOneAndUpdate(filter, value);
+      if (!employee) throw 'No employee with this ID in the database';
+      const updated = await Employee.findById(employee._id);
       res.json(updated);
     } catch (err) {
       console.log(err.message);
@@ -126,10 +124,10 @@ module.exports = {
 
       if (error) {
         console.log(error.details[0].message);
-        throw `error delete project`;
+        throw `error delete employee`;
       }
 
-      const deleted = await Project.findOneAndRemove({
+      const deleted = await Employee.findOneAndRemove({
         _id: value.id
       });
 
@@ -137,7 +135,7 @@ module.exports = {
       res.json(deleted);
     } catch (err) {
       console.log(err.message);
-      res.status(400).json({ error: `error delete project` });
+      res.status(400).json({ error: `error delete employee` });
     }
   }
 };

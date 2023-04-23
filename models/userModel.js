@@ -24,16 +24,16 @@ const userSchema = new mongoose.Schema({
     maxlength: [250, 'The password must contain a miximum of 250 characters'],
     select: false
   },
-  confirmPassword: {
-    type: String,
-    required: [true, 'Please confirm your password'],
-    validate: {
-      validator: function(pass) {
-        return pass === this.password; // this return the currect object that running in the schema
-      },
-      message: 'Passwords are not the same!'
-    }
-  },
+  // confirmPassword: {
+  //   type: String,
+  //   required: [true, 'Please confirm your password'],
+  //   validate: {
+  //     validator: function(pass) {
+  //       return pass === this.password; // this return the currect object that running in the schema
+  //     },
+  //     message: 'Passwords are not the same!'
+  //   }
+  // },
   biz: {
     type: Boolean,
     default: false

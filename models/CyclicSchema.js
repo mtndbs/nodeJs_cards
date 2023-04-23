@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const cyclicSchema = mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.ObjectId
+  },
+
   category: {
     type: String,
     default: 'cyclic'

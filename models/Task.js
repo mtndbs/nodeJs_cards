@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema({
+  userId: {
+    // required: true,
+    type: mongoose.Schema.ObjectId
+  },
+
   category: {
     type: String,
     default: 'Task'
   },
   title: {
     type: String,
-    required: true,
     minlength: 2,
     maxlength: 256
   },

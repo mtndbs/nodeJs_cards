@@ -1,13 +1,31 @@
+/* eslint-disable no-throw-literal */
 /* eslint-disable no-plusplus */
 const joi = require('joi');
-const { forEach } = require('lodash');
+// const { forEach } = require('lodash');
 const { Task } = require('../models/Task');
 // const Cyclic = require('../models/CyclicSchema');
 
 module.exports = {
   getAll: async function(req, res, next) {
     try {
-      const result = await Task.find({}).sort({ urgency: -1 });
+      const result = await Task.find({ userId: req.user._id }).sort({ urgency: -1 });
+      // const result = await Task.find({}).sort({ urgency: -1 });
+      res.json(result);
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({ error: 'error getting tasks' });
+    }
+  },
+
+  getAllforEmplpyee: async function(req, res, next) {
+    try {
+      const employeeId = req.params.id;
+
+      const result = await Task.find({
+        employee: employeeId
+      });
+      // }).sort({ urgency: -1 });
+      // const result = await Task.find({}).sort({ urgency: -1 });
       res.json(result);
     } catch (err) {
       console.log(err);
@@ -30,7 +48,7 @@ module.exports = {
 
   getTEST: async function(req, res, next) {
     try {
-      const results = await Task.find({})
+      const results = await Task.find({ userId: req.user._id })
         .select('-urgency')
         .select('-complete')
         .select('-_id')
@@ -78,11 +96,12 @@ module.exports = {
   addNew: async function(req, res, next) {
     try {
       const schema = joi.object({
+        userId: joi.string().required(),
+
         title: joi
           .string()
           .min(2)
-          .max(256)
-          .required(),
+          .max(256),
         description: joi
           .string()
           .min(2)
@@ -90,8 +109,11 @@ module.exports = {
           .required(),
         complete: joi.boolean(),
         urgency: joi.boolean(),
-        finishTime: joi.allow()
+        finishTime: joi.allow(),
+        employee: joi.any()
       });
+      req.body.userId = req.user.id;
+      console.log(req.body);
 
       const { error, value } = schema.validate(req.body);
 
